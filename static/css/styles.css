@@ -31,7 +31,7 @@ body {
 .content-box {padding:15px ;background:#fff; box-shadow: 0px 0px .5px 0px rgba(50, 50, 50, 0.95);}
 
 .col-md-9 img { width: 100%; padding-top: 1.5em; }
-.col-md-9 h5 { padding: 1.5em 0 1em 0; font-style: italic; }
+.col-md-9 h5 { padding: 1.5em 0 1em 0; font-style: italic; text-align: center; }
 table tr th, table tr td {
     font-size: .75em;
     max-width: 325px;
@@ -42,18 +42,31 @@ a#reset {
     margin-right: 1.1em;
 }
 
-/* Progress bar */
-.bar {
-   display: block;
-   overflow: hidden;
-   height: 18px;
-   width: 0px;
-   border: 1px solid rgba(0, 0, 0, 0.5);
-   border-radius: 10px;
-   margin-bottom: 5px;
-   margin-left: 10px;
-   box-shadow: 1px 1px 1px #888888;
+/* Prev / next buttons */
+#buttons { text-align: center; margin-top: .9em;}
+#buttons #prev, #buttons #next {
+    background-color: #f1f1f1;
+    color: black;
+    font-size: .8em;
+    padding: .2em 1.5em .2em 1.5em;
 }
+#buttons #prev.buttonEnabled, #buttons #next.buttonEnabled {
+    background-color: #f1f1f1;
+    color: black;
+    border: 2px outset gainsboro;
+}
+
+#buttons #prev.buttonDisabled, #buttons #next.buttonDisabled {
+    background-color: #eceaea;
+    border: 1px solid gainsboro;
+    color: #bbb;
+}
+
+#buttons #next:hover, #buttons #prev:hover {
+    background-color: #ddd;
+}
+#buttons #prev { margin-right: 1em;}
+/* End Prev / next buttons */
 
 select#city {
     max-width: 11em;
