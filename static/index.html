@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>UFO Sightings Demo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
+  <script src="https://d3js.org/d3-queue.v3.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h1>Eyewitness Alien Sightings</h1>
+                <h4>d3.js datajoin / filtering demo</h4>
+                <ul>
+                    <li>d3.json + Flask</li>
+                    <li>d3 data-join</li>
+                    <li>Dynamic filters</li>
+                </ul>  
+            </div>                  
+            <div class="col-md-9">
+                <img src="images/the_truth_is_out_there.jpg" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3 col-sm-12 col-xs-12">
+                <h5>Use the filters to the left to refine your search. We promise not to alienate you.</h5>                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-12 col-xs-12 sidebar-box">              
+                    <div class="col-sm-12 col-xs-12">
+                        <h4>Filter sightings</h4>
+                    </div>  
+                    <div class="col-md-12 col-sm-6 col-xs-12">                 
+                        <ul class="filters">
+                            <li>
+                                <input type="text" id="datetime" placeholder="Exact date or year">
+                            </li>
+                            <li>
+                                <label for="city">City</label>
+                                <select id="city">
+                                </select>
+                            </li>
+                            <li>
+                                <label for="state">State</label>
+                                <select id="state">
+                                    <option value="">Select...</option>
+                                    <option value="AL">Alabama</option>
+                                    <option value="AK">Alaska</option>
+                                    <option value="AZ">Arizona</option>
+                                    <option value="AR">Arkansas</option>
+                                    <option value="CA">California</option>
+                                    <option value="CO">Colorado</option>
+                                    <option value="CT">Connecticut</option>
+                                    <option value="DE">Delaware</option>
+                                    <option value="DC">District Of Columbia</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="GA">Georgia</option>
+                                    <option value="HI">Hawaii</option>
+                                    <option value="ID">Idaho</option>
+                                    <option value="IL">Illinois</option>
+                                    <option value="IN">Indiana</option>
+                                    <option value="IA">Iowa</option>
+                                    <option value="KS">Kansas</option>
+                                    <option value="KY">Kentucky</option>
+                                    <option value="LA">Louisiana</option>
+                                    <option value="ME">Maine</option>
+                                    <option value="MD">Maryland</option>
+                                    <option value="MA">Massachusetts</option>
+                                    <option value="MI">Michigan</option>
+                                    <option value="MN">Minnesota</option>
+                                    <option value="MS">Mississippi</option>
+                                    <option value="MO">Missouri</option>
+                                    <option value="MT">Montana</option>
+                                    <option value="NE">Nebraska</option>
+                                    <option value="NV">Nevada</option>
+                                    <option value="NH">New Hampshire</option>
+                                    <option value="NJ">New Jersey</option>
+                                    <option value="NM">New Mexico</option>
+                                    <option value="NY">New York</option>
+                                    <option value="NC">North Carolina</option>
+                                    <option value="ND">North Dakota</option>
+                                    <option value="OH">Ohio</option>
+                                    <option value="OK">Oklahoma</option>
+                                    <option value="OR">Oregon</option>
+                                    <option value="PA">Pennsylvania</option>
+                                    <option value="RI">Rhode Island</option>
+                                    <option value="SC">South Carolina</option>
+                                    <option value="SD">South Dakota</option>
+                                    <option value="TN">Tennessee</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="UT">Utah</option>
+                                    <option value="VT">Vermont</option>
+                                    <option value="VA">Virginia</option>
+                                    <option value="WA">Washington</option>
+                                    <option value="WV">West Virginia</option>
+                                    <option value="WI">Wisconsin</option>
+                                    <option value="WY">Wyoming</option>
+                                </select>				                                  
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12 col-sm-6 col-xs-12">
+                        <ul class="filters">
+                            <li>
+                                <label for="country">Country</label>
+                                <select id="country">
+                                </select>
+                            </li>
+                            <li>
+                                <label for="shape">Shape</label>
+                                <select id="shape">
+                                </select>
+                            </li>                        
+                            <li>
+                                <a id="search" class="btn btn-default">Search</a>
+                                <a id="reset" class="btn btn-default">Reset</a>
+                            </li>     
+                        </ul>
+                    </div>
+            </div>
+            <div class="col-md-9 col-sm-12 col-xs-12">
+                <div id="spinner"></div>
+                <table class="table table-striped">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div> 
+        </div>       
+      </div>
+      
+      <script src="js/index.js" type="text/javascript"></script>      
+</body>
+
+</html>
+       
