@@ -5,5 +5,7 @@
 - Client-side paging
 - Dynamic filtering
 
-### Prerequisite
-Run 'python app.py' in order to expose the JSON dataset over HTTP
+### Steps to run
+- Copy files to a specified directory, and open a Git bash terminal there
+- Run 'python app.py' in order to expose the JSON dataset over HTTP
+- Visit [http://localhost:5000/static/index.html](http://localhost:5000/static/index.html)

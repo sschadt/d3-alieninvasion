@@ -15,10 +15,12 @@
         <div class="row">
             <div class="col-md-3">
                 <h1>Eyewitness Alien Sightings</h1>
-                <h4>d3.js datajoin / filtering demo</h4>
+                <h3>d3.js datajoin / filtering demo</h3>
+                <h4>Features:</h4>
                 <ul>
                     <li>d3.json + Flask</li>
                     <li>d3 data-join</li>
+                    <li>Client-side pagination</li>
                     <li>Dynamic filters</li>
                 </ul>  
             </div>                  
@@ -32,7 +34,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3 col-sm-12 col-xs-12 sidebar-box">              
+            <div class="col-md-3 col-sm-12 col-xs-12 sidebar-box">
+                <div class="filter-box">             
                     <div class="col-sm-12 col-xs-12">
                         <h4>Filter sightings</h4>
                     </div>  
@@ -42,12 +45,12 @@
                                 <input type="text" id="datetime" placeholder="Exact date or year">
                             </li>
                             <li>
-                                <label for="city">City</label>
+                                <label for="city">City:</label>
                                 <select id="city">
                                 </select>
                             </li>
                             <li>
-                                <label for="state">State</label>
+                                <label for="state">State:</label>
                                 <select id="state">
                                     <option value="">Select...</option>
                                     <option value="AL">Alabama</option>
@@ -108,23 +111,24 @@
                     <div class="col-md-12 col-sm-6 col-xs-12">
                         <ul class="filters">
                             <li>
-                                <label for="country">Country</label>
+                                <label for="country">Country:</label>
                                 <select id="country">
                                 </select>
                             </li>
                             <li>
-                                <label for="shape">Shape</label>
+                                <label for="shape">Shape:</label>
                                 <select id="shape">
                                 </select>
                             </li>                        
-                            <li>
+                            <li class="buttons">
                                 <a id="search" class="btn btn-default">Search</a>
                                 <a id="reset" class="btn btn-default">Reset</a>
-                            </li>     
+                            </li>
                         </ul>
                     </div>
+                </div>
             </div>
-            <div class="col-md-9 col-sm-12 col-xs-12">
+            <div class="col-md-9 col-sm-12 col-xs-12 results">
                 <div id="spinner"></div>
                 <div id="buttons">
                     <button id="prev" disabled>&lt; Previous</button>
@@ -136,6 +140,7 @@
                     <tbody>
                     </tbody>
                 </table>
+                <br />
             </div> 
         </div>       
       </div>
