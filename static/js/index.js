@@ -21,7 +21,7 @@ var sightings;
 
 // Data endpoint configuration
 var dataConfig = {
-    data_url : 'http://localhost:5000/data',
+    data_url : 'https://shrouded-beyond-22642.herokuapp.com/data'
 };
 
 //
