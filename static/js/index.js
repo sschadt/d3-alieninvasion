@@ -1,4 +1,5 @@
- // Get references to the tbody element (where we'll load our data)
+/** Variables for page elements and constants */
+// Get references to the tbody element (where we'll load our data)
 var $tbody = d3.select("tbody");
 var $thead = d3.select('thead');
 
@@ -21,12 +22,20 @@ var sightings;
 
 // Data endpoint configuration
 var dataConfig = {
-    data_url : 'https://shrouded-beyond-22642.herokuapp.com/data'
+    data_url : 'http://localhost:5000/data',
 };
 
 //
-// *** Begin page lifecycle ***
+// *** Page lifecycle ***
 //
+
+/**
+ * Get JSON data and if applicable, apply filter 
+ * @param {Object} filter - An object representing the filter form field selections.
+ * @fires filterDataset()
+ * @fires getResults()
+ * @fires filterDropdowns()
+ */
 function getData(filter) {
     // Load data 
     d3.json(dataConfig.data_url, function(error, data) {
@@ -50,14 +59,15 @@ function getData(filter) {
 getData(null);
 
 //
-// **** Page lifecycle functions ****
+// *** Functions ***
 //
 
-/*  
-filterDataset:
-     args: data, filter
-     returns: data set
-*/
+/**
+ * Filter the dataset.
+ * @param {Object[]} data - Dataset to filter.
+ * @param {Object} filter - An object representing the filter form field selections.
+ * @returns {Object[]} data - Filtered dataset. 
+ */
 function filterDataset(data, filter) {
     if (filter) {  // We have a filter object, parse it
         // Loop through each filter property
@@ -84,42 +94,52 @@ function filterDataset(data, filter) {
     return data;
 }
 
-// Based on result set, either build paged table or display a 'no results' message
-function getResults(filteredSightings) {
+/**
+ * Based on result set, either build paged table or display a 'no results' message.
+ * @param {Object[]} data - Dataset for which to show results. 
+ */
+function getResults(data) {
     // Show table (or show 'no results' message, depending on the dataset)
-    if (filteredSightings.length > 0) {
+    if (data.length > 0) {
         // Define columns for table
         var columns = ["datetime", "city", "state", "country", "shape", "durationMinutes", "comments"];
         var headings = ["Date", "City", "State", "Country", "Shape", "Duration", "Comments"];
 
         // Build table of results
-        buildTable(filteredSightings, columns, headings); 
+        buildTable(data, columns, headings); 
     } else {
         // Display no results message
         showNoresults();
     }
 
     // Set up pager (50 per page)
-    setupPaging(filteredSightings, 50);
+    setupPaging(data, 50);
 }
 
-// Filter dropdown lists based on refined dataset
-function filterDropdowns(filteredSightings, filter) {
+/**
+ * Filter dropdown lists based on refined dataset.
+ * @param {Object[]} data - Dataset for which to show results.
+ * @param {Object} filter - Filter object which with to update dropdown data. 
+ */
+function filterDropdowns(data, filter) {
     // City
-    updateDropdown("city", filteredSightings, filter);
+    updateDropdown("city", data, filter);
 
     // Country
-    updateDropdown("country", filteredSightings, filter);
+    updateDropdown("country", data, filter);
 
     // Shape
-    updateDropdown("shape", filteredSightings, filter);
+    updateDropdown("shape", data, filter);
 }
 
 //
-// Page events
+// *** Page events ***
 //
 
-// Search button event
+/**
+ * Search button event
+ * @fires getData() [with filter object built from form values]
+ */
 function handleSearchButtonClick() {
     // Reset spinner
     d3.select("#spinner").style("display", "block");
@@ -144,7 +164,11 @@ function handleSearchButtonClick() {
     getData(objFilter)
 }
 
-// Reset button event
+/**
+ * Reset button event.
+ *
+ * @fires getData() [with NULL filter argument] 
+ */
 function handleResetButtonClick() {
     // Reset spinner
     d3.select("#spinner").style("display", "block");
@@ -158,11 +182,16 @@ function handleResetButtonClick() {
 }
 
 //
-// Utility functions
+// *** Utility functions ***
 //
 
-// buildTable: Build HTML table of search results
-function buildTable(filteredSightings, cols, headings) {
+/**
+ * Build HTML table of search results.
+ * @param {Object[]} data - Dataset of results.
+ * @param {string[]} cols - Dataset column names.
+ * @param {string[]} headings - Human-readable column names.
+ */
+function buildTable(data, cols, headings) {
     // Clear table
     $thead.node().innerHTML = "";
     $tbody.node().innerHTML = "";
@@ -177,7 +206,7 @@ function buildTable(filteredSightings, cols, headings) {
     // Data rows
     var $tr = $tbody
       .selectAll("tr")
-      .data(filteredSightings)
+      .data(data)
       .enter().append("tr");
 
     // Data columns
@@ -188,7 +217,9 @@ function buildTable(filteredSightings, cols, headings) {
         .text(function(d) { return this.parentNode.__data__[d]; });
 }
 
-// Show a 'no results' message, if no results were found
+/**
+ * Show a 'no results' message, if no results were found.
+ */
 function showNoresults() {
     $thead.node().innerHTML = "";
     $tbody.node().innerHTML = "";
@@ -198,12 +229,12 @@ function showNoresults() {
         .text("There are no results for your search query. Please try again.");
 }
 
-// setupPaging: Build pager functionalty
-// Args:
-//      Result set
-//      Page size (int)
+/**
+ * Build paging functionalty.
+ * @param {Object[]} d - Dataset of results.
+ * @param {number} intPageSize - Page size.
+ */
 function setupPaging(d, intPageSize) {
-    // *** Paging functionality ***
     // Initialize button states based on length of current dataset
     if (d.length < intPageSize) {
         disableButton("#next");
@@ -217,14 +248,14 @@ function setupPaging(d, intPageSize) {
 
     // Previous and Next actions: Chain select pushes datum 
     //  into prev and next buttons
-    d3.select("#buttons").select("#prev") // Paging click events
+    d3.select("#buttons").select("#prev") // Previous button
         .on("click", function(d) { 
             if (d.chunk > 0) {
                 d.chunk -= intPageSize;
                 setPage(d.chunk, intPageSize);  
             }
         });
-    d3.select("#buttons").select("#next").on("click", function(d) {
+    d3.select("#buttons").select("#next").on("click", function(d) { // Next button
         d.chunk += intPageSize;
         setPage(d.chunk, intPageSize); 
     });
@@ -233,19 +264,22 @@ function setupPaging(d, intPageSize) {
     setPage(0, intPageSize);
 }
 
-// Filter dropdown list based on refined dataset
-// Args: 
-//      - Dropdown field to update
-//      - Updated dataset
-//      - Filter object
+/**
+ * Filter dropdown list based on refined dataset
+ * @param {string} col - Dropdown field to update.
+ * @param {Object[]} data - Filtered dataset.
+ * @param {Object} f - Object of filter field values.
+ */
 function updateDropdown(col, data, f) {
+    // Use the 'keys' function to obtain all unique values from the dataset column 
+    //  corresponding to the dropdown in question
     elem = "#" + col;
     var select = d3.select(elem);
     var seldata = d3.select(elem).selectAll("option").data(
         d3.map(data, function(d){return d[col]; }).keys()
     );
 
-    // Add elements that are needed
+    // Add elements that are needed from above dataset
     seldata.enter().append("option")
             .merge(seldata)
             .text((d => d))
@@ -257,21 +291,20 @@ function updateDropdown(col, data, f) {
     // Sort alphabetically
     d3.select(elem).selectAll("option").sort(compareFunction);
 
-    // Add a blank option at the top, if no filtering on field in question
+    // Add a blank option at the top.
     var $ddBlank = select.insert("option", ":first-child")
             .text("Select...")
             .attr("value", "");
+    // If the field in question didn't just have a value selected, select the blank option we just added.
     if (f == null || f[col] == "") 
         $ddBlank.attr("selected", true);
-    
 }
 
-// Page 'click' action: 
-//  - Hide all results except those to which user paged
-//  - Don't allow paging to a position of less than 0
-//
-// Arguments: 
-//   Starting page, page size
+/**
+ * Paging 'click' handling: Enable/disable buttons based on position in dataset.
+ * @param {number} start - Page iteration.
+ * @param {number} intPageSize - Page size.
+ */
 function setPage (start, intPageSize) {
     // We're at the last page, disable next button
     if (start >= (sightings.length-intPageSize)) {
@@ -285,6 +318,7 @@ function setPage (start, intPageSize) {
         disableButton("#prev");
     }
 
+    // Hide all table rows except those applicable to current page iteration.
     $tbody.selectAll("tr")
         .style("display", function(d,i) {
             return i >= start && 
@@ -292,7 +326,10 @@ function setPage (start, intPageSize) {
         });
 }
  
-// Disable paging button
+/**
+ * Disable paging button
+ * @param {string} el - Page element (#next or #prev)
+ */
 function disableButton(el) {
     d3.select("#buttons").select(el) // Disable the previous button
     .attr("disabled", "true")
@@ -300,7 +337,10 @@ function disableButton(el) {
     .classed("buttonEnabled", false);
 }
 
-// Enable paging button
+/**
+ * Enable paging button
+ * @param {string} el - Page element (#next or #prev)
+ */
 function enableButton(el) {
     d3.select("#buttons").select(el) // Enable the previous button
     .attr("disabled", null)
@@ -308,7 +348,11 @@ function enableButton(el) {
     .classed("buttonDisabled", false);
 }
 
-// Function to sort dropdowns alphabetically
+/**
+ * Sort dropdowns alphabetically
+ * @param {string} a - Dropdown field value
+ * @param {string} b - Dropdown field value
+ */
 function compareFunction(a, b) {
     if (a < b)
         return -1
